@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { useEffect, useState } from "react";
 import Tooltip from "../Tooltip/Tooltip";
 
@@ -12,10 +13,6 @@ interface Props {
 const WeeklyBar = ({ day, amount, maxDataValue, activeDay, index }: Props) => {
   const [amountValue, setAmountValue] = useState<number>();
   const [activeTooltip, setActiveTooltip] = useState(false);
-  const classValidate =
-    activeDay === index
-      ? "bg-cyan hover:bg-cyan-hover"
-      : "bg-soft-red hover:bg-soft-red-hover";
   useEffect(() => {
     if (maxDataValue) {
       const porcentage = (amount * 100) / maxDataValue;
@@ -29,13 +26,16 @@ const WeeklyBar = ({ day, amount, maxDataValue, activeDay, index }: Props) => {
         <div
           onMouseEnter={() => setActiveTooltip(true)}
           onMouseLeave={() => setActiveTooltip(false)}
-          className={`${classValidate} block cursor-pointer duration-300 ease-in-out w-full rounded-md absolute bottom-0`}
+          className={cn(
+            "block cursor-pointer duration-300 ease-in-out w-full rounded-md absolute bottom-0",
+            {
+              "bg-cyan hover:bg-cyan-hover": activeDay === index,
+              "bg-soft-red hover:bg-soft-red-hover": activeDay !== index,
+            }
+          )}
           style={{ height: `${amountValue}%` }}
         >
-          <Tooltip
-            amount={amount}
-            activeTooltip={activeTooltip}
-          />
+          <Tooltip amount={amount} activeTooltip={activeTooltip} />
         </div>
       </div>
       <span className="flex items-center mt-2 justify-center text-sm text-medium-brown">
